@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_none(self):
@@ -19,12 +19,18 @@ class TestHTMLNode(unittest.TestCase):
         node = HTMLNode("tag", "this is a value!", [], {"href": "https://www.google.com", "target": "_blank",})
         self.assertEqual(html_text, node.props_to_html())
 
-childnode = HTMLNode("thing", "this is another value!", [], {"href":"https://www.google.com"})
-node = HTMLNode("tag", "this is a value!", [childnode], {"href":"https://www.google.com"})
-node2 = HTMLNode("tag", "this is a value!", [childnode], {"href":"https://www.google.com"})
-print(node)
-print(node2)
-if node == node2:
-    print("equal!")
-else:
-    print("not equal.")
+
+class TestLeafNode(unittest.TestCase):
+    def test_leaf_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+    def test_leaf_props_not_equal(self):
+        node = LeafNode("p", "Hello, world!")
+        node2 = LeafNode("p", "Hello, world!", {"href": "https://www.google.com",})
+        self.assertNotEqual(node, node2)
+
+    def test_different_leaves(self):
+        node = LeafNode("p", "Hello, world!")
+        node2 = LeafNode("a", "Hello, different world!")
+        self.assertNotEqual(node, node2)
