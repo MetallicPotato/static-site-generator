@@ -1,9 +1,18 @@
-from textnode import TextNode, TextType
+import os
+import shutil
 
 
 def main():
-    node = TextNode("Hello World", TextType.BOLD, "https://www.boot.dev")
-    print(node)
+    copy_contents()
+
+def copy_contents():
+    public_path = os.path.abspath("public/")
+    src_path = os.path.abspath("src/")
+    if os.path.exists("public/"):
+        print(public_path)
+        shutil.rmtree(public_path)
+    #TODO: finish!
 
 
-main()
+if __name__ == "__main__":
+    main()
