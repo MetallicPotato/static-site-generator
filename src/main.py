@@ -3,22 +3,32 @@ import shutil
 
 
 def main():
-    print(os.listdir())
+    static_to_public()
 
-def copy_contents():
+def static_to_public():
     public_path = os.path.abspath("public/")
     static_path = os.path.abspath("static/")
+    print(f"static: {static_path}")
     if os.path.exists("public/"):
         print(public_path)
         shutil.rmtree(public_path)
     os.mkdir(public_path)
-    dir_contents = os.listdir(static_path)
-    
-    for file_name in dir_contents:
+    copy_contents(static_path, public_path)
 
-        copy_dir = f"{static_path}{file_name}"
-        dest_dir = f"{public_path}{file_name}"
-        shutil.copy(copy_dir, dest_dir)
+def copy_contents(filepath, destinationpath):
+    print(f"copy static: {filepath}")
+    dir_contents = os.listdir(filepath)
+    for file_name in dir_contents:
+        copy_dir = f"{filepath}/{file_name}"
+        if os.path.isfile(copy_dir):
+            dest_dir = f"{destinationpath}/{file_name}"
+            #TODO: this dest_dir needs to respect the file locations from the copy_dir!
+            shutil.copy(copy_dir, dest_dir)
+            print(f"Copied file {copy_dir}")
+        else:
+            new_destination = f"{destinationpath}/{file_name}"
+            os.mkdir(new_destination)
+            copy_contents(copy_dir, new_destination)
 
 
 if __name__ == "__main__":
